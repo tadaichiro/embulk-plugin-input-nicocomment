@@ -17,7 +17,7 @@ module Embulk
       columns = [
         Column.new(0, 'smid', :string),
         Column.new(1, 'comment', :string),
-        Column.new(2, 'date', :string)
+        Column.new(2, 'date', :timestamp)
       ]
 
       puts "File information generation started."
@@ -50,11 +50,11 @@ module Embulk
       com_info = get_comments(cookie, thread_info)
 
       com_info.each { |com|
-        if com_info['id'] != nil
-          begin
-            @page_builder.add([com_info['id'].to_s, com_info['content'].to_s, scom_info['date'].to_s])
-          rescue
+        begin
+          if com['id'] != nil
+              @page_builder.add([com['id'], com['content'], com['date']])
           end
+        rescue
         end
       }
 
@@ -162,19 +162,22 @@ module Embulk
         next if ms == nil
 
         path = "/#{ms}/api.json/thread?version=20090904&thread=#{thread_val}&res_from=-1000"
-        puts path
-        response = http_response(host, path, cookie)
-      
-        JSON.load(response.body).each { |js|
-          comjs = js['chat']
-          if comjs != nil
-            com_info = {}
-            com_info['id'] = ar[:sm]
-            com_info['content'] = comjs['content']
-            com_info['date'] = Time.at(comjs['date'])
-            ret << com_info
-          end
-        }
+        
+        begin
+          response = http_response(host, path, cookie)
+        
+          JSON.load(response.body).each { |js|
+            comjs = js['chat']
+            if comjs != nil
+              com_info = {}
+              com_info['id'] = ar[:sm]
+              com_info['content'] = comjs['content']
+              com_info['date'] = Time.at(comjs['date'])
+              ret << com_info
+            end
+          }
+        rescue
+        end
       }
 
       return ret
