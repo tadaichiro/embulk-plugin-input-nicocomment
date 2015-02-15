@@ -1,6 +1,6 @@
 module Embulk
 
-  class InputFileInformation < InputPlugin
+  class InputNicoComment < InputPlugin
     Plugin.register_input('nicocomment', self)
 
     def self.transaction(config, &control)
