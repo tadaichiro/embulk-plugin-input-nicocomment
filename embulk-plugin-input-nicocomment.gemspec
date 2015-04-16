@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://github.com/tadaichiro/embulk-plugin-input-nicocomment"
   gem.license       = "MIT"
 
-  gem.files         = [ "lib/embulk/input_nicocomment.rb",  "README.md" ]
+  gem.files         = [ "lib/embulk/input/nicocomment.rb",  "README.md", "LICENSE.txt" ]
 
   gem.add_development_dependency "bundler", "~> 1.8"
   # spec.add_development_dependency "rake", "~> 10.0"
